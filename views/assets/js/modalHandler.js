@@ -78,12 +78,9 @@ var modalHandler = new function(){
     };
 
     var createErrorItemForList = function (itemBody) {
-
-        var test =  $('<li/>', {
+        return $('<li/>', {
             class: "list-group-item list-group-item-danger"
         }).append(itemBody);
-        console.log(test);
-        return test;
     }
 
 };

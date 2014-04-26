@@ -123,7 +123,19 @@ class Person {
         foreach($this->getPhoneNumbers() as $number)
         {
             if((int) $number->getPhoneNumber() === (int)$phoneNumber->getPhoneNumber())
-                throw new UniquePersonPhoneNumberException('This person already has this number !');
+                throw new UniquePersonPhoneNumberException();
         }
+    }
+
+    /**
+     * Sets person credentials
+     *
+     * @param $firstName
+     * @param $lastName
+     */
+    public function setCredentials($firstName, $lastName)
+    {
+        $this->setFirstName($firstName);
+        $this->setLastName($lastName);
     }
 } 

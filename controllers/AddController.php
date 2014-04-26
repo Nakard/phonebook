@@ -81,9 +81,9 @@ class Phonebook_AddController extends Zend_Controller_Action
                  * @var Phonebook\Repository\PersonRepository $personRepository
                  */
                 $personRepository = $this->entityManager->getRepository('Phonebook\Entity\Person');
-                $result = $form->parseForm($personRepository);
-                if(!$result instanceof UniquePersonException)
+                try
                 {
+                    $form->parseForm($personRepository);
                     $values = $form->getValues();
                     $firstName = $values['firstName'];
                     $lastName = $values['lastName'];
@@ -92,7 +92,10 @@ class Phonebook_AddController extends Zend_Controller_Action
                     $personRepository->insertNewPerson($firstName, $lastName, $phoneNumber);
                     $this->redirect('/phonebook');
                 }
-                $formErrors[] = $result->getMessage();
+                catch(\Exception $e)
+                {
+                    $formErrors[] = $e->getMessage();
+                }
             }
             else
             {

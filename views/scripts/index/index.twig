@@ -23,8 +23,12 @@
 
                 if(e.target.dataset.editperson)
                 {
-                    phonebookAjaxer.getEditPersonForm(e.target.dataset.editperson, {{ page }});
+                    phonebookAjaxer.getEditForm(e.target.dataset.editperson, {{ page }}, 'person');
+                    return;
                 }
+
+                if(e.target.dataset.editnumber)
+                    phonebookAjaxer.getEditForm(e.target.dataset.editnumber, {{ page }}, 'number');
             });
         });
     </script>

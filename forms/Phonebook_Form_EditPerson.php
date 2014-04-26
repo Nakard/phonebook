@@ -26,7 +26,7 @@ class Phonebook_Form_EditPerson extends Phonebook_Form_Abstract {
     {
         $this->setMethod('POST');
 
-        $this->setAttrib('id','editPersonForm');
+        $this->setAttrib('id','editForm');
 
         $this
             ->addElement(new PersonNameText('firstName','First Name'))

@@ -15,16 +15,16 @@ use Phonebook\Form\Elements\Submit;
 use Phonebook\Form\Elements\Hash;
 use Phonebook\Form\Elements\PhoneNumberText;
 /**
- * Class Phonebook_Form_EditNumber
+ * Class Phonebook_Form_EditPhoneNumber
  * @package Phonebook\Form
  */
-class Phonebook_Form_EditNumber extends Phonebook_Form_Abstract{
+class Phonebook_Form_EditPhoneNumber extends Phonebook_Form_Abstract{
 
     public function init()
     {
         $this->setMethod('POST');
 
-        $this->setAttrib('id','editPersonForm');
+        $this->setAttrib('id','editForm');
 
         $this
             ->addElement(new PhoneNumberText())
@@ -37,7 +37,7 @@ class Phonebook_Form_EditNumber extends Phonebook_Form_Abstract{
      *
      * @param Phonenumber $number
      */
-    public function setNumber(PhoneNumber $number)
+    public function setPhoneNumber(PhoneNumber $number)
     {
         $phoneNumber = $number->getPhoneNumber();
 

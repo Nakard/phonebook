@@ -21,21 +21,19 @@ var phonebookAjaxer = new function () {
             });
         });
     };
-    this.getEditPersonForm = function(id, actualPage){
-        $.get('/phonebook/edit/person/'+id, function(response){
+    this.getEditForm = function(id, actualPage, type) {
+        $.get('/phonebook/edit/'+type+'/'+id, function(response) {
             $("#modal").html(response);
             $("#modalMessages").modal('show');
-            enableFormListerner(id,actualPage);
+            enableFormListener(id,actualPage,type);
         });
     };
-    var sendEditPerson = function (id, data, actualPage) {
-        $.post('/phonebook/edit/person/'+id, data, function(response){
+    var sendEdit = function(id, data, actualPage, type) {
+        $.post('/phonebook/edit/'+type+'/'+id, data, function(response){
             $.post('/phonebook/'+actualPage, function(paginationData){
                 modalHandler.setModalOutput(response);
                 if('4' === response.status.charAt(0))
-                {
-                    enableFormListerner(id,actualPage);
-                }
+                    enableFormListener(id,actualPage,type);
                 $("#mainContainer").html(paginationData);
             });
         });
@@ -49,12 +47,12 @@ var phonebookAjaxer = new function () {
             $("#modalMessages").modal('hide');
             return;
         }
-        sendEditPerson(event.data.id,submitValue,event.data.actualPage);
+        sendEdit(event.data.id,submitValue,event.data.actualPage,event.data.type);
     };
 
-    var enableFormListerner = function (id,actualPage) {
-        var form = $("#editPersonForm");
+    var enableFormListener = function (id,actualPage,type) {
+        var form = $("#editForm");
         var compareValue = $(form).serialize();
-        $(form).submit({id: id, actualPage: actualPage, compareValue: compareValue}, formSubmitListener);
+        $(form).submit({id: id, actualPage: actualPage, type: type,compareValue: compareValue}, formSubmitListener);
     };
 };

@@ -16,4 +16,14 @@ namespace Phonebook\Exceptions;
  */
 class UniquePersonPhoneNumberException extends \PDOException {
 
+    /**
+     * @inheritdoc
+     */
+    public function __construct(
+        $message = "This person already has this number !",
+        $code = 0,
+        \Exception $previous = null
+    ) {
+        parent::__construct($message,$code,$previous);
+    }
 } 

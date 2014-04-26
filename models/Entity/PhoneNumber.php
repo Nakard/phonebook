@@ -10,6 +10,8 @@
 
 namespace Phonebook\Entity;
 
+use Phonebook\Exceptions\UniquePersonPhoneNumberException;
+
 /**
  * Class PhoneNumber
  * @package Phonebook\Entity
@@ -45,6 +47,7 @@ class PhoneNumber {
      */
     public function setPhoneNumber($phoneNumber)
     {
+        $this->assertNumberUniqueness($phoneNumber);
         $this->phoneNumber = $phoneNumber;
     }
 
@@ -79,4 +82,25 @@ class PhoneNumber {
     {
         return $this->id;
     }
-} 
+    /**
+     * Checks if phone number is unique for a person
+     *
+     * @param   string                         $number
+     * @throws  UniquePersonPhoneNumberException
+     */
+    public function assertNumberUniqueness($number)
+    {
+        $person = $this->getPerson();
+        if(is_null($person))
+            return;
+        $personPhoneNumbers = $person->getPhoneNumbers();
+        /**
+         * @var PhoneNumber $phoneNumber
+         */
+        foreach($personPhoneNumbers as $phoneNumber)
+        {
+            if((int)$phoneNumber->getPhoneNumber() === (int)$number)
+                throw new UniquePersonPhoneNumberException();
+        }
+    }
+}

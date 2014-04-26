@@ -1,6 +1,7 @@
 <?php
 
 use Phonebook\Repository\PhoneNumberRepository;
+use Phonebook\Form\Phonebook_Form_Abstract;
 
 class Phonebook_IndexController extends Zend_Controller_Action
 {
@@ -97,120 +98,99 @@ class Phonebook_IndexController extends Zend_Controller_Action
         $this->_helper->json($json);
 
     }
-    public function editNumberAction()
+
+
+    public function editAction()
     {
-        $numberId = $this->_getParam('id');
+        $entityId = $this->_getParam('id');
+        $entityResolver = new \Phonebook\Resolver\EntityResolver();
+        $entityClass = ucfirst($entityResolver->typeTranslate($this->_getParam('type')));
+
         /**
          * @var Zend_Controller_Request_Http $request
          */
         $request = $this->getRequest();
+        $entityRepository = $this->entityManager->getRepository('\\Phonebook\\Entity\\'.$entityClass);
+        $entity = $entityRepository->find($entityId);
+        $entityFormClass = "\\Phonebook\\Form\\Phonebook_Form_Edit".$entityClass;
         /**
-         * @var \Phonebook\Entity\PhoneNumber $number
+         * @var Phonebook_Form_Abstract $entityForm
          */
-        $number = $this->entityManager->find('\Phonebook\Entity\PhoneNumber',$numberId);
-        $form = new \Phonebook\Form\Phonebook_Form_EditNumber();
-        $form->setNumber($number);
-        $title = 'Edit phone number';
-        $message = 'Number changed successfully';
+        $entityForm = new $entityFormClass();
+        $entityFormSetMethod = 'set'.$entityClass;
+        $entityForm->$entityFormSetMethod($entity);
+        $title = $entityResolver->getEntityMessage($entityClass, 'title');
+        $message = $entityResolver->getEntityMessage($entityClass, 'message');
         $status = '200';
         $formErrors = array();
+        $validationClosure = null;
+        $validationMethod = $entityResolver->getEntityMessage($entityClass, 'validate');
+
         if($request->isPost())
         {
-            if($form->isValid($request->getPost()))
+            if($entityForm->isValid($request->getPost()))
             {
-                $values = $form->getValues();
-                $number->setPhoneNumber($values['phoneNumber']);
-                $this->entityManager->persist($number);
                 try
                 {
+                    if(!is_null($validationMethod))
+                        $validationClosure = array($entityRepository, $validationMethod);
+                    $values = $entityForm->getValues();
+                    $entityResolver->callEntitySetMethods($entity, $values, $validationClosure);
+                    $this->entityManager->persist($entity);
                     $this->entityManager->flush();
                 }
-                catch(\Doctrine\DBAL\DBALException $e)
+                catch(\Exception $e)
                 {
-                    $formErrors[] = $e->getMessage();
-                    $status = '400';
-                    $message = 'Database error occurred';
+                    $this->setExceptionErrorResponse($formErrors,$status,$message,$e);
                 }
             }
             else
             {
-                $formErrors = array_merge($formErrors, $form->getMessages());
-                $status = '400';
-                $message = 'There are errors in the form';
+                $this->setFormErrorResponse($formErrors, $status, $message, $entityForm);
             }
-
             $this->_helper->json(array(
                 'title'         =>  $title,
                 'status'        =>  $status,
                 'message'       =>  $message,
                 'formErrors'    =>  $formErrors,
-                'form'          =>  $form->render()
+                'form'          =>  $entityForm->render()
             ));
             return;
         }
+
         $this->view->modalData = array(
             'title' =>  $title,
-            'form'  =>  $form->render()
+            'form'  =>  $entityForm->render()
         );
     }
 
-    public function editPersonAction()
+    /**
+     * Sets data for form error json output
+     *
+     * @param array     $formErrors
+     * @param string    $status
+     * @param string    $message
+     */
+    protected function setFormErrorResponse(array &$formErrors, &$status, &$message, Phonebook_Form_Abstract &$form)
     {
-        $personId = $this->_getParam('id');
-        /**
-         * @var Zend_Controller_Request_Http $request
-         */
-        $request = $this->getRequest();
-        /**
-         * @var \Phonebook\Entity\Person $person
-         */
-        $person = $this->entityManager->find('\Phonebook\Entity\Person',$personId);
-        $form = new \Phonebook\Form\Phonebook_Form_EditPerson();
-        $form->setPerson($person);
-        $title = 'Edit person credentials';
-        $message = 'Credentials changed successfully';
-        $status = '200';
-        $formErrors = array();
-        if($request->isPost())
-        {
-            if($form->isValid($request->getPost()))
-            {
-                $values = $form->getValues();
-                $person->setFirstName($values['firstName']);
-                $person->setLastName($values['lastName']);
-                $this->entityManager->persist($person);
-                try
-                {
-                    $this->entityManager->flush();
-                }
-                catch(\Doctrine\DBAL\DBALException $e)
-                {
-                    $formErrors[] = $e->getMessage();
-                    $status = '400';
-                    $message = 'Database error occurred';
-                }
-            }
-            else
-            {
-                $formErrors = array_merge($formErrors, $form->getMessages());
-                $status = '400';
-                $message = 'There are errors in the form';
-            }
+        $formErrors = array_merge($formErrors, $form->getMessages());
+        $status = '400';
+        $message = 'There are errors in the form';
+    }
 
-            $this->_helper->json(array(
-                'title'         =>  $title,
-                'status'        =>  $status,
-                'message'       =>  $message,
-                'formErrors'    =>  $formErrors,
-                'form'          =>  $form->render()
-            ));
-            return;
-        }
-
-        $this->view->modalData = array(
-            'title' =>  $title,
-            'form'  =>  $form->render()
-        );
+    /**
+     * Sets data for exception error json output
+     *
+     * @param array     $formErrors
+     * @param string    $status
+     * @param string    $message
+     * @param Exception $e
+     */
+    protected function setExceptionErrorResponse(array &$formErrors, &$status, &$message, \Exception $e)
+    {
+        $formErrors[] = $e->getMessage();
+        $status = '400';
+        $message = 'Database error occurred';
     }
 }
 

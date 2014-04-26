@@ -16,6 +16,7 @@ use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\Query;
 use Phonebook\Entity\Person;
 use Phonebook\Entity\PhoneNumber;
+use Phonebook\Exceptions\UniquePersonException;
 
 /**
  * Class PersonRepository
@@ -47,7 +48,6 @@ class PersonRepository extends EntityRepository{
      *
      * @param   string  $firstName
      * @param   string  $lastName
-     * @return  bool
      */
     public function checkPersonUniqueness($firstName, $lastName)
     {
@@ -55,8 +55,8 @@ class PersonRepository extends EntityRepository{
             'firstName' =>  $firstName,
             'lastName'  =>  $lastName,
         ));
-
-        return !$result instanceof Person ? true : false;
+        if($result instanceof Person)
+            throw new UniquePersonException();
     }
 
     /**

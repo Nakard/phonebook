@@ -14,6 +14,8 @@ namespace Phonebook\Repository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Parameter;
+use Phonebook\Entity\PhoneNumber;
+use Phonebook\Exceptions\UniquePersonPhoneNumberException;
 
 /**
  * Class PhoneNumberRepository

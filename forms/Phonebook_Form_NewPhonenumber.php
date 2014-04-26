@@ -80,11 +80,6 @@ class Phonebook_Form_NewPhonenumber extends Phonebook_Form_Abstract {
         $firstName = $values['firstName'];
         $lastName = $values['lastName'];
 
-        if(!$repo->checkPersonUniqueness($firstName, $lastName))
-        {
-            return new UniquePersonException('Person with this credentials already exists !');
-        }
-
-        return true;
+        $repo->checkPersonUniqueness($firstName, $lastName);
     }
 } 
