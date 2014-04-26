@@ -15,7 +15,6 @@ $connection = array(
     'password'  =>  'am021086',
     'port'      =>  '3306',
     'dbname'    =>  'ZendPhoneBook'
-    //'path'      =>  __DIR__.'/phonebook.db.sqlite'
 );
 
 $entityManager = EntityManager::create($connection, $config);
