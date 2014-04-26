@@ -49,6 +49,8 @@ class Phonebook_Bootstrap extends Zend_Application_Module_Bootstrap
      */
     protected function _initAutoload()
     {
+        require_once ('vendor/autoload.php');
+
         $autoloader = new Zend_Application_Module_Autoloader(array(
             'namespace' =>  'Phonebook_',
             'basePath'  =>  dirname(__FILE__)
@@ -61,6 +63,7 @@ class Phonebook_Bootstrap extends Zend_Application_Module_Bootstrap
      */
     public function _initView()
     {
+
         $view = new Zwig_View(array(
             'encoding'     =>  'UTF-8',
             'helperPath'    =>  array()
