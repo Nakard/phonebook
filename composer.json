@@ -1,0 +1,27 @@
+{
+    "name": "Phonebook/Phonebook",
+    "description": "Phonebook Zend module for SMT Software",
+    "require": {
+        "doctrine/orm": "2.3.*",
+        "alb/zwig": "1.0.*",
+        "twig/twig": ">=1.8, <=2.0",
+        "twbs/bootstrap": "3.1.*"
+    },
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Arkadiusz Moskwa",
+            "email": "a.moskwa@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4" : {
+            "Phonebook\\Entity\\": "models/Entity",
+            "Phonebook\\Repository\\": "models/Repository",
+            "Phonebook\\Form\\": "forms",
+            "Phonebook\\": ""
+        }
+    },
+    "minimum-stability": "stable",
+    "include-path": ["vendor/doctrine"]
+}
