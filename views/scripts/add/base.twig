@@ -1,0 +1,32 @@
+{% extends 'base.twig' %}
+
+{% block mainContent %}
+    {% block formErrors %}
+        {% if formErrors is not empty %}
+            <div class="panel panel-danger text-left">
+                <div class="panel-heading">There are errors in the form</div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                    {% for formKey, error in formErrors %}
+                        {% if error is iterable %}
+                            {% for key, value in error %}
+                                <li class="list-group-item list-group-item-danger">{{ formKey }}:{{ value }}</li>
+                            {% endfor %}
+                        {% else %}
+                        <li class="list-group-item-danger list-group-item">{{ error }}</li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+    <h3>{% block formHeader %}{% endblock %}</h3>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            {{ form|raw }}
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+{% endblock %}

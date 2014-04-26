@@ -1,0 +1,32 @@
+{% extends 'base.twig' %}
+
+{% if modalData is defined %}
+
+    {% block modalTitle %}
+        {{ modalData.title }}
+    {% endblock %}
+    {% block modalBody %}
+        {{ modalData.message ~ '(' ~ modalData.status ~ ')' }}
+    {% endblock %}
+    {% if not modalData.confirm %}
+        {% block modalButton %}{% endblock %}
+    {% endif %}
+{% endif %}
+
+{% block mainContent %}
+    {% include 'index/numbers.twig' %}
+{% endblock %}
+
+{% block appendJs %}
+    <script src="/assets/phonebook/js/ajaxer.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#mainContainer").click(function(e){
+                if(!e.target.dataset.remove)
+                    return false;
+
+                phonebookAjaxer.sendRemove(e.target.dataset.remove, {{ page }});
+            });
+        });
+    </script>
+{% endblock %}
