@@ -53,7 +53,7 @@ class Phonebook_Form_ExistingPhonenumber extends Phonebook_Form_Abstract{
 
         $this->addElement(new PersonSelect());
         $this->addElement(new PhoneNumberText());
-        $this->addElement(new Submit('submit'));
+        $this->addElement(new Submit('Submit'));
         $this->addElement(new Hash());
 
         $this->setMainDecorators();

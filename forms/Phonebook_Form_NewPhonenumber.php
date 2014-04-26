@@ -39,7 +39,7 @@ class Phonebook_Form_NewPhonenumber extends Phonebook_Form_Abstract {
         $this->addElement(new PersonNameText('firstName', 'First Name'));
         $this->addElement(new PersonNameText('lastName', 'Last Name'));
         $this->addElement(new PhoneNumberText());
-        $this->addElement(new Submit('submit'));
+        $this->addElement(new Submit('Submit'));
         $this->addElement(new Hash());
 
         $this->setMainDecorators();
