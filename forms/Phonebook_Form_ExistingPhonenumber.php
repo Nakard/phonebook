@@ -11,6 +11,10 @@
 namespace Phonebook\Form;
 
 use Phonebook\Exceptions\UniquePersonPhoneNumberException;
+use Phonebook\Form\Elements\Hash;
+use Phonebook\Form\Elements\PersonSelect;
+use Phonebook\Form\Elements\PhoneNumberText;
+use Phonebook\Form\Elements\Submit;
 use Phonebook\Repository\PhoneNumberRepository;
 
 /**
@@ -47,45 +51,12 @@ class Phonebook_Form_ExistingPhonenumber extends Phonebook_Form_Abstract{
             'role'  =>  'form'
         ));
 
-        $select = new \Zend_Form_Element_Select('person', array(
-            'label'     =>  'Person',
-            'required'  =>  true,
-            'class'     =>  'form-control'
-        ));
-        $this->addElement($select);
+        $this->addElement(new PersonSelect());
+        $this->addElement(new PhoneNumberText());
+        $this->addElement(new Submit('submit'));
+        $this->addElement(new Hash());
 
-        $this->addElement('text','phoneNumber',array(
-            'placeholder'   =>  'Phone number',
-            'label'         =>  'Phone number',
-            'class'         =>  'form-control',
-            'required'      =>  true,
-            'filters'       =>  array('StringTrim', 'StripTags'),
-            'validators'    =>  array(
-                array('notEmpty'),
-                'Digits'
-            )
-        ));
-        $this->addElement('submit', 'submit', array(
-            'ignore'    =>  true,
-            'label'     =>  'Submit',
-            'class'     =>  'btn btn-primary'
-        ));
-        $this->addElement('hash','csrf', array(
-            'ignore'    =>  true,
-        ));
-
-        $this->setDecorators(array(
-            'FormElements',
-            array('HtmlTag', array('tag' => 'fieldset', 'class' => 'fieldset-bordered')),
-            'Form',
-        ));
-        $this->setElementDecorators(array(
-            'ViewHelper',
-            'Errors',
-            array('Label', array('class' => 'sr-only')),
-            array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'form-group')),
-            array('ViewHelper', array('class' => 'form-control')),
-        ));
+        $this->setMainDecorators();
     }
 
     /**

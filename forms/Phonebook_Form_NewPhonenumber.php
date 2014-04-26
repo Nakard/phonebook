@@ -12,6 +12,10 @@ namespace Phonebook\Form;
 
 use Doctrine\ORM\EntityManager;
 use Phonebook\Exceptions\UniquePersonException;
+use Phonebook\Form\Elements\Hash;
+use Phonebook\Form\Elements\PersonNameText;
+use Phonebook\Form\Elements\PhoneNumberText;
+use Phonebook\Form\Elements\Submit;
 use Phonebook\Repository\PersonRepository;
 
 /**
@@ -32,54 +36,13 @@ class Phonebook_Form_NewPhonenumber extends Phonebook_Form_Abstract {
             'role'  =>  'form'
         ));
 
-        $this->addElement('text','firstName', array(
-            'placeholder'   =>  'First name',
-            'label'         =>  'First name',
-            'class'         =>  'form-control',
-            'required'      =>  true,
-            'filters'       =>  array('StringTrim', 'StripTags'),
-            'validators'    =>  array(
-                array('validator' => 'StringLength', 'options' => array(1,50)),
-                array('notEmpty'),
-                'Alpha'
-            )
-        ));
-        $this->addElement('text','lastName', array(
-            'placeholder'   =>  'Last name',
-            'label'         =>  'Last name',
-            'class'         =>  'form-control',
-            'required'      =>  true,
-            'filters'       =>  array('StringTrim', 'StripTags'),
-            'validators'    =>  array(
-                array('validator' => 'StringLength', 'options' => array(1,50)),
-                array('validator' => 'notEmpty', 'messages' => array(
-                    'isEmpty'
-                )),
-                'Alpha'
-            )
-        ));
+        $this->addElement(new PersonNameText('firstName', 'First Name'));
+        $this->addElement(new PersonNameText('lastName', 'Last Name'));
+        $this->addElement(new PhoneNumberText());
+        $this->addElement(new Submit('submit'));
+        $this->addElement(new Hash());
 
-        $this->addElement('text','phoneNumber',array(
-            'placeholder'   =>  'Phone number',
-            'label'         =>  'Phone number',
-            'class'         =>  'form-control',
-            'required'      =>  true,
-            'filters'       =>  array('StringTrim', 'StripTags'),
-            'validators'    =>  array(
-                array('notEmpty'),
-                'Digits'
-            )
-        ));
-        $this->addElement('submit', 'submit', array(
-            'ignore'    =>  true,
-            'label'     =>  'Submit',
-            'class'     =>  'btn btn-primary'
-        ));
-        $this->addElement('hash','csrf', array(
-            'ignore'    =>  true,
-        ));
-
-
+        $this->setMainDecorators();
     }
 
     /**

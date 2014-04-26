@@ -25,7 +25,6 @@ abstract class Phonebook_Form_Abstract extends \Zend_Form{
         ));
         $this->setElementDecorators(array(
             'ViewHelper',
-            'Errors',
             array('Label', array('class' => 'sr-only')),
             array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'form-group')),
             array('ViewHelper', array('class' => 'form-control')),
@@ -48,5 +47,4 @@ abstract class Phonebook_Form_Abstract extends \Zend_Form{
      * @return  array
      */
     abstract protected function errorKeysTranslate(array $messages);
-
-} 
+}
