@@ -1,26 +1,24 @@
 <?php
 /**
- * Phonebook_Form_EditPerson.php
+ * Phonebook_Form_EditNumber.php
  *
  * Creation date: 2014-04-26
- * Creation time: 12:54
+ * Creation time: 21:47
  *
  * @author Arkadiusz Moskwa <a.moskwa@gmail.com>
  */
 
 namespace Phonebook\Form;
 
-
-use Phonebook\Entity\Person;
-use Phonebook\Form\Elements\Hash;
-use Phonebook\Form\Elements\PersonNameText;
+use Phonebook\Entity\PhoneNumber;
 use Phonebook\Form\Elements\Submit;
-
+use Phonebook\Form\Elements\Hash;
+use Phonebook\Form\Elements\PhoneNumberText;
 /**
- * Class Phonebook_Form_EditPerson
+ * Class Phonebook_Form_EditNumber
  * @package Phonebook\Form
  */
-class Phonebook_Form_EditPerson extends Phonebook_Form_Abstract {
+class Phonebook_Form_EditNumber extends Phonebook_Form_Abstract{
 
     public function init()
     {
@@ -29,25 +27,21 @@ class Phonebook_Form_EditPerson extends Phonebook_Form_Abstract {
         $this->setAttrib('id','editPersonForm');
 
         $this
-            ->addElement(new PersonNameText('firstName','First Name'))
-            ->addElement(new PersonNameText('lastName', 'Last Name'))
+            ->addElement(new PhoneNumberText())
             ->addElement(new Submit('Save Changes'))
             ->addElement(new Hash());
         $this->setMainDecorators();
     }
-
     /**
-     * Sets the person data in the inputs
+     * Sets the phonenumber in the inputs
      *
-     * @param Person $person
+     * @param Phonenumber $number
      */
-    public function setPerson(Person $person)
+    public function setNumber(PhoneNumber $number)
     {
-        $firstName = $person->getFirstName();
-        $lastName = $person->getLastName();
+        $phoneNumber = $number->getPhoneNumber();
 
-        $this->getElement('firstName')->setValue($firstName);
-        $this->getElement('lastName')->setValue($lastName);
+        $this->getElement('phoneNumber')->setValue($phoneNumber);
     }
 
     /**
@@ -57,8 +51,7 @@ class Phonebook_Form_EditPerson extends Phonebook_Form_Abstract {
     {
         $translatedMessages = array();
         $translation = array(
-            'firstName'     =>  'First name',
-            'lastName'      =>  'Last name',
+            'phoneNumber'   =>  'Phone number',
             'csrf'          =>  'CSRF Token'
         );
         foreach($messages as $formKey => $formErrors)
@@ -67,5 +60,4 @@ class Phonebook_Form_EditPerson extends Phonebook_Form_Abstract {
         }
         return $translatedMessages;
     }
-
 } 

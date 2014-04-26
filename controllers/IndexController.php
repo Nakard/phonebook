@@ -22,6 +22,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
             ->clearActionContexts('editPerson')
             ->setActionContext('remove', 'json')
             ->setActionContext('editPerson','json')
+            ->setActionContext('editNumber','json')
             ->initContext();
         /**
          * @var Zend_Controller_Action_Helper_AjaxContext $ajaxContext
@@ -32,6 +33,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
             ->clearActionContexts('editPerson')
             ->addActionContext('index','html')
             ->addActionContext('editPerson','html')
+            ->addActionContext('editNumber','html')
             ->initContext();
     }
 
@@ -94,6 +96,62 @@ class Phonebook_IndexController extends Zend_Controller_Action
 
         $this->_helper->json($json);
 
+    }
+    public function editNumberAction()
+    {
+        $numberId = $this->_getParam('id');
+        /**
+         * @var Zend_Controller_Request_Http $request
+         */
+        $request = $this->getRequest();
+        /**
+         * @var \Phonebook\Entity\PhoneNumber $number
+         */
+        $number = $this->entityManager->find('\Phonebook\Entity\PhoneNumber',$numberId);
+        $form = new \Phonebook\Form\Phonebook_Form_EditNumber();
+        $form->setNumber($number);
+        $title = 'Edit phone number';
+        $message = 'Number changed successfully';
+        $status = '200';
+        $formErrors = array();
+        if($request->isPost())
+        {
+            if($form->isValid($request->getPost()))
+            {
+                $values = $form->getValues();
+                $number->setPhoneNumber($values['phoneNumber']);
+                $this->entityManager->persist($number);
+                try
+                {
+                    $this->entityManager->flush();
+                }
+                catch(\Doctrine\DBAL\DBALException $e)
+                {
+                    $formErrors[] = $e->getMessage();
+                    $status = '400';
+                    $message = 'Database error occurred';
+                }
+            }
+            else
+            {
+                $formErrors = array_merge($formErrors, $form->getMessages());
+                $status = '400';
+                $message = 'There are errors in the form';
+            }
+
+            $this->_helper->json(array(
+                'title'         =>  $title,
+                'status'        =>  $status,
+                'message'       =>  $message,
+                'formErrors'    =>  $formErrors,
+                'form'          =>  $form->render()
+            ));
+            return;
+        }
+        $this->view->modalData = array(
+            'title' =>  $title,
+            'form'  =>  $form->render()
+        );
     }
 
     public function editPersonAction()
