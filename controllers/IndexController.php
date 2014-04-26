@@ -18,6 +18,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
          */
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
         $contextSwitch
+            ->clearActionContexts('remove')
             ->setActionContext('remove', 'json')
             ->initContext();
         /**
@@ -25,6 +26,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
          */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext
+            ->clearActionContexts('remove')
             ->addActionContext('index','html')
             ->initContext();
     }
