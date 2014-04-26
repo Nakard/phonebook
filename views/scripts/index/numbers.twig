@@ -1,16 +1,4 @@
-{% if modalData is defined %}
-    {% embed 'index/modal.twig' %}
-    {% block modalTitle %}
-        {{ modalData.title }}
-    {% endblock %}
-    {% block modalBody %}
-        {{ modalData.message ~ '(' ~ modalData.status ~ ')' }}
-    {% endblock %}
-    {% if not modalData.confirm %}
-        {% block modalButton %}{% endblock %}
-    {% endif %}
-    {% endembed %}
-{% endif %}
+{% include 'index/modal.twig' %}
 <div class="row">
     {{ paginator|raw }}
 </div>

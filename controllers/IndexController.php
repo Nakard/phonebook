@@ -77,12 +77,12 @@ class Phonebook_IndexController extends Zend_Controller_Action
             $this->entityManager->remove($phoneNumber);
             $this->entityManager->flush();
             $message = 'Phone number id: '.$phoneNumberId.' removed';
-            $status = 200;
+            $status = '200';
         }
         catch(\Doctrine\ORM\ORMInvalidArgumentException $e)
         {
             $message = 'There was an error during removing the number from the database';
-            $status = 400;
+            $status = '400';
         }
 
         $json = array(
