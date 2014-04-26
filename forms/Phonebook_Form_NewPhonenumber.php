@@ -18,7 +18,7 @@ use Phonebook\Repository\PersonRepository;
  * Class Phonebook_Form_NewPhonenumber
  * @package Phonebook\Form
  */
-class Phonebook_Form_NewPhonenumber extends \Zend_Form{
+class Phonebook_Form_NewPhonenumber extends Phonebook_Form_Abstract {
 
     /**
      * @inheritdoc
@@ -79,18 +79,7 @@ class Phonebook_Form_NewPhonenumber extends \Zend_Form{
             'ignore'    =>  true,
         ));
 
-        $this->setDecorators(array(
-            'FormElements',
-            array('HtmlTag', array('tag' => 'fieldset', 'class' => 'fieldset-bordered')),
-            'Form',
-        ));
-        $this->setElementDecorators(array(
-            'ViewHelper',
-            'Errors',
-            array('Label', array('class' => 'sr-only')),
-            array(array('row' => 'HtmlTag'), array('tag' => 'div', 'class' => 'form-group')),
-            array('ViewHelper', array('class' => 'form-control')),
-        ));
+
     }
 
     /**
@@ -113,15 +102,6 @@ class Phonebook_Form_NewPhonenumber extends \Zend_Form{
             $translatedMessages[$translation[$formKey]] = $formErrors;
         }
         return $translatedMessages;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMessages($name = null, $suppressArrayNotation = false)
-    {
-        $messages = parent::getMessages($name, $suppressArrayNotation);
-        return $this->errorKeysTranslate($messages);
     }
 
     /**

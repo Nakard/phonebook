@@ -17,7 +17,7 @@ use Phonebook\Repository\PhoneNumberRepository;
  * Class Phonebook_Form_ExistingPhonenumber
  * @package Phonebook\Form
  */
-class Phonebook_Form_ExistingPhonenumber extends \Zend_Form{
+class Phonebook_Form_ExistingPhonenumber extends Phonebook_Form_Abstract{
 
     /**
      * Populates select options after initialization
@@ -89,10 +89,7 @@ class Phonebook_Form_ExistingPhonenumber extends \Zend_Form{
     }
 
     /**
-     * Translates form errors array with more human readable
-     *
-     * @param   array   $messages
-     * @return  array
+     * @inheritdoc
      */
     protected function errorKeysTranslate(array $messages)
     {
@@ -106,14 +103,5 @@ class Phonebook_Form_ExistingPhonenumber extends \Zend_Form{
             $translatedMessages[$translation[$formKey]] = $formErrors;
         }
         return $translatedMessages;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getMessages($name = null, $suppressArrayNotation = false)
-    {
-        $messages = parent::getMessages($name, $suppressArrayNotation);
-        return $this->errorKeysTranslate($messages);
     }
 } 
