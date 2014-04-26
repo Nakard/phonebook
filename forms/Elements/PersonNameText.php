@@ -23,14 +23,14 @@ final class PersonNameText extends \Zend_Form_Element_Text{
     public function __construct($spec, $label)
     {
         $options = array(
-            'placeholder'   =>  'First name',
-            'label'         =>  'First name',
+            'placeholder'   =>  $label,
+            'label'         =>  $label,
             'class'         =>  'form-control',
             'required'      =>  true,
             'filters'       =>  array('StringTrim', 'StripTags'),
             'validators'    =>  array(
                 array('validator' => 'StringLength', 'options' => array(1,50)),
-                'notEmpty','Alpha'
+                'Alpha'
             )
         );
         parent::__construct($spec, $options);

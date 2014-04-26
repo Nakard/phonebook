@@ -1,7 +1,8 @@
-{% include 'modal.twig' %}
+{% if numbers is not empty %}
 <div class="row">
     {{ paginator|raw }}
 </div>
+{% endif %}
 <div class="row" id="actions-table">
     <div class="col-md-12">
         {% if numbers is not empty %}
@@ -25,14 +26,14 @@
                                 <button
                                         type="button"
                                         class="btn btn-primary btn-sm"
-
+                                        data-editPerson="{{ number.pid }}"
                                         >
                                     <span class="glyphicon glyphicon-user"></span> Edit person
                                 </button>
                                 <button
                                         type="button"
                                         class="btn btn-success btn-sm"
-                                        data-edit="{{ number.pid }}"
+                                        data-editNumber="{{ number.nid }}"
                                         >
                                     <span class="glyphicon glyphicon-pencil"></span> Edit number
                                 </button>
@@ -41,7 +42,7 @@
                                         class="btn btn-danger btn-sm"
                                         data-remove="{{ number.nid }}"
                                         >
-                                    <span class="glyphicon glyphicon-remove"></span> Remove
+                                    <span class="glyphicon glyphicon-remove"></span> Remove number
                                 </button>
                             </div>
                         </td>

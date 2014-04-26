@@ -19,7 +19,9 @@ class Phonebook_IndexController extends Zend_Controller_Action
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
         $contextSwitch
             ->clearActionContexts('remove')
+            ->clearActionContexts('editPerson')
             ->setActionContext('remove', 'json')
+            ->setActionContext('editPerson','json')
             ->initContext();
         /**
          * @var Zend_Controller_Action_Helper_AjaxContext $ajaxContext
@@ -27,7 +29,9 @@ class Phonebook_IndexController extends Zend_Controller_Action
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext
             ->clearActionContexts('remove')
+            ->clearActionContexts('editPerson')
             ->addActionContext('index','html')
+            ->addActionContext('editPerson','html')
             ->initContext();
     }
 
@@ -54,10 +58,6 @@ class Phonebook_IndexController extends Zend_Controller_Action
         {
             $this->_helper->viewRenderer('numbers');
         }
-        if($request->isPost() && $modalData = $request->getPost('modalData'))
-        {
-            $this->view->modalData = $modalData;
-        }
 
         $this->view->numbers = $numbersOnPage;
         $this->view->paginator = $paginator;
@@ -73,7 +73,6 @@ class Phonebook_IndexController extends Zend_Controller_Action
         $phoneNumberRepository = $this->entityManager->getRepository('\Phonebook\Entity\PhoneNumber');
         $phoneNumber = $phoneNumberRepository->find($phoneNumberId);
         $title = 'Phone number remove';
-        $confirm = false;
         try
         {
             $this->entityManager->remove($phoneNumber);
@@ -91,13 +90,69 @@ class Phonebook_IndexController extends Zend_Controller_Action
             'message'   =>  $message,
             'status'    =>  $status,
             'title'     =>  $title,
-            'confirm'   =>  $confirm
         );
 
         $this->_helper->json($json);
 
     }
 
+    public function editPersonAction()
+    {
+        $personId = $this->_getParam('id');
+        /**
+         * @var Zend_Controller_Request_Http $request
+         */
+        $request = $this->getRequest();
+        /**
+         * @var \Phonebook\Entity\Person $person
+         */
+        $person = $this->entityManager->find('\Phonebook\Entity\Person',$personId);
+        $form = new \Phonebook\Form\Phonebook_Form_EditPerson();
+        $form->setPerson($person);
+        $title = 'Edit person credentials';
+        $message = 'Credentials changed successfully';
+        $status = '200';
+        $formErrors = array();
+        if($request->isPost())
+        {
+            if($form->isValid($request->getPost()))
+            {
+                $values = $form->getValues();
+                $person->setFirstName($values['firstName']);
+                $person->setLastName($values['lastName']);
+                $this->entityManager->persist($person);
+                try
+                {
+                    $this->entityManager->flush();
+                }
+                catch(\Doctrine\DBAL\DBALException $e)
+                {
+                    $formErrors[] = $e->getMessage();
+                    $status = '400';
+                    $message = 'Database error occurred';
+                }
+            }
+            else
+            {
+                $formErrors = array_merge($formErrors, $form->getMessages());
+                $status = '400';
+                $message = 'There are errors in the form';
+            }
 
+            $this->_helper->json(array(
+                'title'         =>  $title,
+                'status'        =>  $status,
+                'message'       =>  $message,
+                'formErrors'    =>  $formErrors,
+                'form'          =>  $form->render()
+            ));
+            return;
+        }
+
+        $this->view->modalData = array(
+            'title' =>  $title,
+            'form'  =>  $form->render()
+        );
+    }
 }
 

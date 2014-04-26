@@ -11,56 +11,57 @@
 namespace Phonebook\Form;
 
 
-class Phonebook_Form_EditPerson extends \Zend_Form {
+use Phonebook\Entity\Person;
+use Phonebook\Form\Elements\Hash;
+use Phonebook\Form\Elements\PersonNameText;
+use Phonebook\Form\Elements\Submit;
+
+class Phonebook_Form_EditPerson extends Phonebook_Form_Abstract {
 
     public function init()
     {
         $this->setMethod('POST');
 
-        $firstName = new \Zend_Form_Element_Text('firstName', array(
-            'placeholder'   =>  'First name',
-            'label'         =>  'First name',
-            'class'         =>  'form-control',
-            'required'      =>  true,
-            'filters'       =>  array('StringTrim', 'StripTags'),
-            'validators'    =>  array(
-                array('validator' => 'StringLength', 'options' => array(1,50)),
-                array('notEmpty'),
-                'Alpha'
-            )
-        ));
-
-        $lastName = new \Zend_Form_Element_Text('lastName', array(
-            'placeholder'   =>  'Last name',
-            'label'         =>  'Last name',
-            'class'         =>  'form-control',
-            'required'      =>  true,
-            'filters'       =>  array('StringTrim', 'StripTags'),
-            'validators'    =>  array(
-                array('validator' => 'StringLength', 'options' => array(1,50)),
-                array('validator' => 'notEmpty', 'messages' => array(
-                    'isEmpty'
-                )),
-                'Alpha'
-            )
-        ));
-
-        $saveChanges = new \Zend_Form_Element_Submit('submit', array(
-            'ignore'    =>  true,
-            'label'     =>  'Submit',
-            'class'     =>  'btn btn-primary'
-        ));
-
-
-        $hash = new \Zend_Form_Element_Hash('csrf', array(
-            'ignore'    =>  true,
-        ));
+        $this->setAttrib('id','editPersonForm');
 
         $this
-            ->addElement($firstName)
-            ->addElement($lastName)
-            ->addElement($saveChanges)
-            ->addElement($hash);
+            ->addElement(new PersonNameText('firstName','First Name'))
+            ->addElement(new PersonNameText('lastName', 'Last Name'))
+            ->addElement(new Submit('Save Changes'))
+            ->addElement(new Hash());
+        $this->setMainDecorators();
+    }
+
+    /**
+     * Sets the person data in the inputs
+     *
+     * @param Person $person
+     */
+    public function setPerson(Person $person)
+    {
+        $firstName = $person->getFirstName();
+        $lastName = $person->getLastName();
+
+        $this->getElement('firstName')->setValue($firstName);
+        $this->getElement('lastName')->setValue($lastName);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function errorKeysTranslate(array $messages)
+    {
+        $translatedMessages = array();
+        $translation = array(
+            'firstName'     =>  'First name',
+            'lastName'      =>  'Last name',
+            'csrf'          =>  'CSRF Token'
+        );
+        foreach($messages as $formKey => $formErrors)
+        {
+            $translatedMessages[$translation[$formKey]] = $formErrors;
+        }
+        return $translatedMessages;
     }
 
 } 

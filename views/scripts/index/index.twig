@@ -1,29 +1,30 @@
 {% extends 'base.twig' %}
 
-{% if modalData is defined %}
-
-    {% block modalTitle %}
-        {{ modalData.title }}
-    {% endblock %}
-    {% block modalBody %}
-        {{ modalData.message ~ '(' ~ modalData.status ~ ')' }}
-    {% endblock %}
-    {% if not modalData.confirm %}
-        {% block modalButton %}{% endblock %}
-    {% endif %}
-{% endif %}
 
 {% block mainContent %}
     {% include 'index/numbers.twig' %}
 {% endblock %}
 
 {% block appendJs %}
+    <script src="/assets/phonebook/js/modalHandler.js"></script>
     <script src="/assets/phonebook/js/ajaxer.js"></script>
     <script>
         $(document).ready(function(){
+            $("#modalMessages").modal({
+                'keyboard'  :   false,
+                'show'      :   false
+            });
             $("#mainContainer").click(function(e){
                 if(e.target.dataset.remove)
+                {
                     phonebookAjaxer.sendRemove(e.target.dataset.remove, {{ page }});
+                    return;
+                }
+
+                if(e.target.dataset.editperson)
+                {
+                    phonebookAjaxer.getEditPersonForm(e.target.dataset.editperson, {{ page }});
+                }
             });
         });
     </script>

@@ -30,6 +30,7 @@ final class PhoneNumberText extends \Zend_Form_Element_Text{
             'required'      =>  true,
             'filters'       =>  array('StringTrim', 'StripTags'),
             'validators'    =>  array(
+                array('validator' => 'StringLength', 'options' => array(9,9)),
                 'notEmpty','Digits'
             )
         );
