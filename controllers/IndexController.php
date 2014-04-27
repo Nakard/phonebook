@@ -103,6 +103,12 @@ class Phonebook_IndexController extends Zend_Controller_Action
         $filter = $this->getFilter($request);
         $page = $this->_getParam('page');
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
+        $session = new Zend_Session_Namespace('Phonebook');
+        if($message = $session->message)
+        {
+            $this->view->sessionMessage = $message;
+            unset($session->message);
+        }
         /**
          * @var PhoneNumberRepository $phoneNumberRepository
          */
@@ -133,7 +139,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
     protected function getFilter(Zend_Controller_Request_Http &$request)
     {
         $postFilter = $request->getPost('filter');
-        $session = new Zend_Session_Namespace('Phonebook',true);
+        $session = new Zend_Session_Namespace('Phonebook');
         if('' === $postFilter || $postFilter)
         {
             $session->filter = $postFilter;

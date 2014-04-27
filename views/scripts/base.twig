@@ -54,6 +54,15 @@
 <div class="container">
 
     <div class="starter-template">
+        {% if sessionMessage %}
+            <div id="sessionMessages" class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 alert alert-success">
+                    <span class="glyphicon glyphicon-ok-sign"></span>  {{ sessionMessage }}
+                </div>
+                <div class="col-md-3"></div>
+            </div>
+        {% endif %}
         {% block filter %}
         {% set showFilterAndExport = numbers is defined and numbers is not empty %}
         <div class="row">

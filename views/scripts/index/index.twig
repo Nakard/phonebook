@@ -12,6 +12,11 @@
     <script src="/assets/phonebook/js/uploader.js"></script>
     <script>
         $(document).ready(function(){
+            {% if sessionMessage %}
+            setTimeout(function(){
+                $("#sessionMessages").slideUp();
+            },3000);
+            {% endif %}
             $("#modalMessages").modal({
                 'keyboard'  :   false,
                 'show'      :   false

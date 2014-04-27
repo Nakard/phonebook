@@ -36,6 +36,7 @@ class Phonebook_AddController extends Zend_Controller_Action
         /**
          * @var Phonebook\Repository\PersonRepository $personRepository
          */
+        $session = new Zend_Session_Namespace('Phonebook');
         $personRepository = $this->entityManager->getRepository('Phonebook\Entity\Person');
         $persons = $personRepository->findAllForSelect();
         if(empty($persons))
@@ -52,13 +53,21 @@ class Phonebook_AddController extends Zend_Controller_Action
                 {
                     $values = $form->getValues();
                     $personId = $values['person'];
+                    $number = $values['phoneNumber'];
                     $phoneNumber = new \Phonebook\Entity\PhoneNumber();
-                    $phoneNumber->setPhoneNumber($values['phoneNumber']);
+                    $phoneNumber->setPhoneNumber($number);
                     /**
-                     * @var Phonebook\Repository\PersonRepository $personRepository
+                     * @var \Phonebook\Repository\PersonRepository $personRepository
                      */
                     $personRepository = $this->entityManager->getRepository('Phonebook\Entity\Person');
+                    /**
+                     * @var \Phonebook\Entity\Person $person
+                     */
+                    $person = $personRepository->find($personId);
+                    $firstName = $person->getFirstName();
+                    $lastName = $person->getLastName();
                     $personRepository->addNumberToPerson($phoneNumber, $personId);
+                    $session->message = 'Successfully added '.$number.' to '.$firstName.' '.$lastName.' numbers';
                     $this->redirect('/phonebook');
                 }
                 catch(UniquePersonPhoneNumberException $e)
@@ -86,6 +95,7 @@ class Phonebook_AddController extends Zend_Controller_Action
          * @var Zend_Controller_Request_Http $request
          */
         $request = $this->getRequest();
+        $session = new Zend_Session_Namespace('Phonebook');
 
         $form = new \Phonebook\Form\Phonebook_Form_NewPhonenumber();
         $formErrors = array();
@@ -103,9 +113,11 @@ class Phonebook_AddController extends Zend_Controller_Action
                     $values = $form->getValues();
                     $firstName = $values['firstName'];
                     $lastName = $values['lastName'];
+                    $number = $values['phoneNumber'];
                     $phoneNumber = new \Phonebook\Entity\PhoneNumber();
-                    $phoneNumber->setPhoneNumber($values['phoneNumber']);
+                    $phoneNumber->setPhoneNumber($number);
                     $personRepository->insertNewPerson($firstName, $lastName, $phoneNumber);
+                    $session->message = 'Successfully added '.$firstName.' '.$lastName.' with phone number '.$number;
                     $this->redirect('/phonebook');
                 }
                 catch(\Exception $e)
