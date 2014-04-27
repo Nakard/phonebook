@@ -76,9 +76,21 @@ class PersonRepository extends EntityRepository{
                     ),'p.lastName'
                 ).' as value'
             )
-            ->from('Phonebook\Entity\Person','p');
-        $query = $qb->getQuery();
-        return $query->getResult(Query::HYDRATE_ARRAY);
+            ->from('Phonebook\Entity\Person','p')
+            ->orderBy('p.lastName');
+        return $qb->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @return array
+     */
+    public function findAllIds()
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select('p.id')
+            ->from('\Phonebook\Entity\Person','p');
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**

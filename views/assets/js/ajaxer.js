@@ -9,13 +9,23 @@
 
 var phonebookAjaxer = new function () {
 
+    var initialFormValue = '';
+
+    var getInitialFormValue = function () {
+        return initialFormValue;
+    };
+
+    var setInitialFormValue = function (form) {
+        initialFormValue = $(form).serialize();
+    };
+
     this.sendRemove = function (id, actualPage) {
         if(!confirm('Are you sure ?'))
             return;
 
         $.post('/phonebook/remove/'+id, function(removeData){
             modalHandler.setModalOutput(removeData);
-            $.post('/phonebook/'+actualPage, function(paginationData){
+            $.post('/phonebook/'+actualPage, {filter: filterHandler.getFilterValue()},function(paginationData){
                 $("#mainContainer").html(paginationData);
                 $('#modalMessages').modal('show');
             });
@@ -30,10 +40,13 @@ var phonebookAjaxer = new function () {
     };
     var sendEdit = function(id, data, actualPage, type) {
         $.post('/phonebook/edit/'+type+'/'+id, data, function(response){
-            $.post('/phonebook/'+actualPage, function(paginationData){
-                modalHandler.setModalOutput(response);
-                if('4' === response.status.charAt(0))
-                    enableFormListener(id,actualPage,type);
+            modalHandler.setModalOutput(response);
+            if('4' === response.status.charAt(0))
+            {
+                enableFormListener(id,actualPage,type);
+                return;
+            }
+            $.post('/phonebook/'+actualPage, {filter: filterHandler.getFilterValue()},function(paginationData){
                 $("#mainContainer").html(paginationData);
             });
         });
@@ -52,7 +65,11 @@ var phonebookAjaxer = new function () {
 
     var enableFormListener = function (id,actualPage,type) {
         var form = $("#editForm");
-        var compareValue = $(form).serialize();
-        $(form).submit({id: id, actualPage: actualPage, type: type,compareValue: compareValue}, formSubmitListener);
+        if('' === getInitialFormValue())
+            setInitialFormValue(form);
+        $(form).submit(
+            {id: id, actualPage: actualPage, type: type,compareValue: getInitialFormValue()},
+            formSubmitListener
+        );
     };
 };

@@ -11,6 +11,8 @@ var filterHandler = new function () {
 
     var filter = $("#filter");
 
+    var filterValue = null;
+
     var timeout = null;
 
     var delay = 1000;
@@ -30,9 +32,14 @@ var filterHandler = new function () {
         if(timeout)
             clear();
         timeout = setTimeout(function(){
-            $.post('/phonebook/'+actualPage,{filter: $(filter).val()}, function(paginationData){
+            filterValue = $(filter).val();
+            $.post('/phonebook/'+actualPage,{filter: filterValue}, function(paginationData){
                 $("#mainContainer").html(paginationData);
             });
         },delay);
+    };
+
+    this.getFilterValue = function () {
+        return filterValue;
     };
 };

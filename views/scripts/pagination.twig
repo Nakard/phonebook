@@ -1,6 +1,6 @@
 {% set baseUrl = '/phonebook/' %}
 {% if pageCount is defined %}
-    <ul class="pagination">
+    <ul id="pagination" class="pagination">
     {% if previous is defined %}
         <li><a href="{{ baseUrl ~ previous }}">&laquo;</a></li>
     {% else %}

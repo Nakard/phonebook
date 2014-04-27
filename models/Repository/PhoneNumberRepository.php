@@ -47,9 +47,9 @@ class PhoneNumberRepository extends EntityRepository{
             $lowerFilter = strtolower($filter);
             $qb
                 ->where('n.phoneNumber LIKE :filter')
-                //->where('LOWER(p.firstName) LIKE :filter')
-                //->andWhere('LOWER(p.lastName) LIKE :filter')
-                ->setParameter('filter',$lowerFilter);
+                ->orwhere('LOWER(p.firstName) LIKE :filter')
+                ->orWhere('LOWER(p.lastName) LIKE :filter')
+                ->setParameter('filter','%'.$lowerFilter.'%');
         }
 
         $query = $qb->getQuery();
