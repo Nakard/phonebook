@@ -31,6 +31,18 @@ var phonebookAjaxer = new function () {
             });
         });
     };
+
+    this.getImportForm = function() {
+        $.get('/phonebook/csv/import', function(response){
+            $("#modal").html(response);
+            $("#modalMessages").modal('show');
+            $("#fileUpload").submit(function(e){
+                e.preventDefault();
+                uploader.readFiles($(this));
+            });
+        });
+    };
+
     this.getEditForm = function(id, actualPage, type) {
         $.get('/phonebook/edit/'+type+'/'+id, function(response) {
             $("#modal").html(response);

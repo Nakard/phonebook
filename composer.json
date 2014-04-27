@@ -5,8 +5,7 @@
         "doctrine/orm": "2.3.*",
         "alb/zwig": "1.0.*",
         "twig/twig": ">=1.8, <=2.0",
-        "twbs/bootstrap": "3.1.*",
-        "johnculviner/jquery.fileDownload": "1.0.0"
+        "twbs/bootstrap": "3.1.*"
     },
     "license": "proprietary",
     "authors": [
@@ -23,20 +22,7 @@
             "Phonebook\\": ""
         }
     },
-    "repositories": {
-        "yadif": {
-            "type": "package",
-            "package": {
-                "name": "johnculviner/jquery.fileDownload",
-                "version": "1.0.0",
-                "source": {
-                    "url": "https://github.com/johnculviner/jquery.fileDownload",
-                    "type": "git",
-                    "reference": "c67fec04613ef584350749b4d85c15f00e5b1e89"
-                }
-            }
-        }
-    },
+
     "minimum-stability": "stable",
     "include-path": ["vendor/doctrine"]
 }

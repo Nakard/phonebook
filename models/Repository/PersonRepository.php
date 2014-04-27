@@ -24,6 +24,7 @@ use Phonebook\Exceptions\UniquePersonException;
  */
 class PersonRepository extends EntityRepository{
 
+    private $successfulInsertions = 0;
     /**
      * Inserts new person with phonenumber
      *
@@ -105,12 +106,103 @@ class PersonRepository extends EntityRepository{
          * @var \Phonebook\Entity\Person $person
          */
         $person = $this->find($personId);
-        $person->addPhoneNumber($number);
-        $number->setPerson($person);
-        $em = $this->getEntityManager();
-        $em->persist($person);
-        $em->flush();
+        $this->addPersistableNumber($number,$person);
+        $this->getEntityManager()->persist($person);
+        $this->getEntityManager()->flush();
     }
 
+    /**
+     * Persists number to the person
+     *
+     * @param PhoneNumber   $number
+     * @param Person        $person
+     */
+    private function addPersistableNumber(PhoneNumber &$number, Person &$person)
+    {
+        $person->addPhoneNumber($number);
+        $number->setPerson($person);
+    }
 
+    /**
+     * Merges data from import with existing records
+     *
+     * @param array $parsedImportArray
+     */
+    public function mergeImport(array &$parsedImportArray)
+    {
+        $this->successfulInsertions = 0;
+        foreach($parsedImportArray as $personFullname => &$numbers)
+        {
+
+            try
+            {
+                $nameParts = explode(" ",$personFullname);
+                $personFirstName = $nameParts[0];
+                $personLastName = $nameParts[1];
+                $person = $this->findOneBy(array(
+                    'firstName' =>  $personFirstName,
+                    'lastName'  =>  $personLastName
+                ));
+                if($person instanceof Person)
+                {
+                    $this->mergeNumbersForExistingPerson($person, $numbers);
+                }
+                else
+                {
+                    $this->addNewPersonNumbers($personFirstName, $personLastName, $numbers);
+                }
+            }
+            catch(\Exception $e)
+            {
+                continue;
+            }
+        }
+        $this->getEntityManager()->flush();
+        return $this->successfulInsertions;
+    }
+
+    /**
+     * Merges number with person existing in the database
+     *
+     * @param   Person    $person
+     * @param   array     $numbers
+     */
+    private function mergeNumbersForExistingPerson(Person &$person, array &$numbers)
+    {
+        $this->addPersistableNumbers($person, $numbers);
+        $this->getEntityManager()->persist($person);
+    }
+
+    /**
+     * Adds new person with her/his numbers
+     *
+     * @param   string    $firstName
+     * @param   string    $lastName
+     * @param   array     $numbers
+     */
+    private function addNewPersonNumbers(&$firstName, &$lastName, array &$numbers)
+    {
+        $person = new Person();
+        $person->setFirstName($firstName);
+        $person->setLastName($lastName);
+        $this->addPersistableNumbers($person, $numbers);
+        $this->getEntityManager()->persist($person);
+    }
+
+    /**
+     * Adds number collection to a person
+     *
+     * @param Person    $person
+     * @param array     $numbers
+     */
+    private function addPersistableNumbers(Person &$person, array $numbers)
+    {
+        foreach($numbers as $number)
+        {
+            $phoneNumber = new PhoneNumber();
+            $phoneNumber->setPhoneNumber($number);
+            $this->addPersistableNumber($phoneNumber,$person);
+            $this->successfulInsertions++;
+        }
+    }
 }

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4e2ed755959648ae7d308b6f067b8388",
+    "hash": "b92e2de73b894c0b44ab7348d14de4f2",
     "packages": [
         {
             "name": "alb/zwig",
@@ -576,28 +576,18 @@
             "time": "2014-02-08 16:28:24"
         },
         {
-            "name": "johnculviner/jquery.fileDownload",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/johnculviner/jquery.fileDownload",
-                "reference": "c67fec04613ef584350749b4d85c15f00e5b1e89"
-            },
-            "type": "library"
-        },
-        {
             "name": "symfony/console",
-            "version": "v2.4.3",
+            "version": "v2.4.4",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "ef20f1f58d7f693ee888353962bd2db336e3bbcb"
+                "reference": "2e452005b1e1d003d23702d227e23614679eb5ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/ef20f1f58d7f693ee888353962bd2db336e3bbcb",
-                "reference": "ef20f1f58d7f693ee888353962bd2db336e3bbcb",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/2e452005b1e1d003d23702d227e23614679eb5ca",
+                "reference": "2e452005b1e1d003d23702d227e23614679eb5ca",
                 "shasum": ""
             },
             "require": {
@@ -638,7 +628,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-01 17:35:04"
+            "time": "2014-04-27 13:34:57"
         },
         {
             "name": "twbs/bootstrap",

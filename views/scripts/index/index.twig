@@ -9,6 +9,7 @@
     <script src="/assets/phonebook/js/modalHandler.js"></script>
     <script src="/assets/phonebook/js/ajaxer.js"></script>
     <script src="/assets/phonebook/js/filterHandler.js"></script>
+    <script src="/assets/phonebook/js/uploader.js"></script>
     <script>
         $(document).ready(function(){
             $("#modalMessages").modal({
@@ -16,6 +17,9 @@
                 'show'      :   false
             });
             filterHandler.startListening({{ page }});
+            $("#csvImport").click(function(){
+                phonebookAjaxer.getImportForm();
+            });
             $("#mainContainer").click(function(e){
                 if(e.target.dataset.remove)
                 {
