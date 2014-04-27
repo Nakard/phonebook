@@ -8,6 +8,11 @@
  * @author Arkadiusz Moskwa <a.moskwa@gmail.com>
  */
 
+/**
+ * Csv import and export handling controller
+ *
+ * Class Phonebook_CsvController
+ */
 class Phonebook_CsvController extends Zend_Controller_Action{
 
     /**
@@ -15,6 +20,9 @@ class Phonebook_CsvController extends Zend_Controller_Action{
      */
     protected $entityManager;
 
+    /**
+     * Inits EntityManager and action contexts
+     */
     public function init()
     {
         $registry = Zend_Registry::getInstance();
@@ -24,6 +32,7 @@ class Phonebook_CsvController extends Zend_Controller_Action{
          */
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
         $contextSwitch
+            ->setActionContext('import','json')
             ->clearActionContexts('export')
             ->initContext();
         /**
@@ -35,6 +44,9 @@ class Phonebook_CsvController extends Zend_Controller_Action{
             ->initContext();
     }
 
+    /**
+     * Exports phone numbers
+     */
     public function exportAction()
     {
         /**
@@ -42,7 +54,7 @@ class Phonebook_CsvController extends Zend_Controller_Action{
          */
         $phoneNumberRepository = $this->entityManager->getRepository('\Phonebook\Entity\PhoneNumber');
         $phoneNumbers = $phoneNumberRepository->getExport();
-        $filename = 'export.csv';
+        $filename = 'Phone_Book_export.csv';
         $csvHandler = new \Phonebook\File\CsvHandler();
         $csvHandler->exportPhoneNumbers($filename,$phoneNumbers);
         header('Set-Cookie: fileDownload=true; path=/');
@@ -52,6 +64,9 @@ class Phonebook_CsvController extends Zend_Controller_Action{
         readfile($filename);
     }
 
+    /**
+     * Imports CSV file and merges with existing data
+     */
     public function importAction()
     {
         $form = new \Phonebook\Form\Phonebook_Form_FileUpload();

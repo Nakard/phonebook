@@ -11,8 +11,8 @@ $config = Setup::createAnnotationMetadataConfiguration(
 $connection = array(
     'driver'    =>  'pdo_mysql',
     'host'      =>  'localhost',
-    'user'      =>  'root',
-    'password'  =>  'am021086',
+    'user'      =>  'phonebook',
+    'password'  =>  'phonebook',
     'port'      =>  '3306',
     'dbname'    =>  'ZendPhoneBook'
 );

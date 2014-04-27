@@ -28,7 +28,7 @@ var filterHandler = new function () {
      * Actually running timeout
      * @type {number}
      */
-    var timeout = setTimeout();
+    var timeout = null;
 
     /**
      * Delay between last keyup and actual filter

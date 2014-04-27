@@ -3,6 +3,11 @@
 use Phonebook\Exceptions\UniquePersonException;
 use Phonebook\Exceptions\UniquePersonPhoneNumberException;
 
+/**
+ * Controller responsible for adding numbers and persons
+ *
+ * Class Phonebook_AddController
+ */
 class Phonebook_AddController extends Zend_Controller_Action
 {
     /**
@@ -10,12 +15,18 @@ class Phonebook_AddController extends Zend_Controller_Action
      */
     protected $entityManager;
 
+    /**
+     * Inits Doctrine Entity Manager
+     */
     public function init()
     {
         $registry = Zend_Registry::getInstance();
         $this->entityManager = $registry->entityManager;
     }
 
+    /**
+     * Adds number to existing person
+     */
     public function existingAction()
     {
         /**
@@ -66,6 +77,9 @@ class Phonebook_AddController extends Zend_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * Adds a new number and person
+     */
     public function newAction()
     {
         /**

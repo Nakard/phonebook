@@ -13,6 +13,7 @@ use Phonebook\Exceptions\MissingCsvHeadersException;
 
 /**
  * Class CsvHandler
+ * Handler for import, export and pre-parsing CSV
  * @package Phonebook\File
  */
 class CsvHandler {

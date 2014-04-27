@@ -20,7 +20,7 @@ class Phonebook_Bootstrap extends Zend_Application_Module_Bootstrap
     }
 
     /**
-     * Ładuje konfig modułu z pliku
+     * Loads config module
      */
     protected function _loadModuleConfig()
     {
@@ -43,7 +43,7 @@ class Phonebook_Bootstrap extends Zend_Application_Module_Bootstrap
     }
 
     /**
-     *
+     * Registers composer and Zend autoloaders
      *
      * @return Zend_Application_Module_Autoloader
      */
@@ -59,6 +59,8 @@ class Phonebook_Bootstrap extends Zend_Application_Module_Bootstrap
     }
 
     /**
+     * Inits Zwig, the Zend Twig module
+     *
      * @return Zwig_View
      */
     public function _initView()
@@ -97,6 +99,8 @@ class Phonebook_Bootstrap extends Zend_Application_Module_Bootstrap
     }
 
     /**
+     * Inits Doctrine
+     *
      * @return \Doctrine\ORM\EntityManager
      */
     public function _initDoctrine()

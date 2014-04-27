@@ -73,8 +73,8 @@ class PersonRepository extends EntityRepository{
                 'p.id as key',
                 $qb->expr()->concat(
                     $qb->expr()->concat(
-                        'p.firstName', $qb->expr()->literal(' ')
-                    ),'p.lastName'
+                        'p.lastName', $qb->expr()->literal(' ')
+                    ),'p.firstName'
                 ).' as value'
             )
             ->from('Phonebook\Entity\Person','p')
@@ -83,6 +83,8 @@ class PersonRepository extends EntityRepository{
     }
 
     /**
+     * Finds all person IDs
+     *
      * @return array
      */
     public function findAllIds()

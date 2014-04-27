@@ -10,7 +10,10 @@
 
 namespace Phonebook\Form;
 
-
+/**
+ * Class Phonebook_Form_Abstract
+ * @package Phonebook\Form
+ */
 abstract class Phonebook_Form_Abstract extends \Zend_Form{
 
     /**

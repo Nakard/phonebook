@@ -56,7 +56,7 @@ var phonebookAjaxer = new function () {
 
         $.post('/phonebook/remove/'+id, function(removeData){
             modalHandler.setModalOutput(removeData);
-            self.refreshIndexSite(actualPage);
+            phonebookAjaxer.refreshIndexSite(actualPage);
         });
     };
 
