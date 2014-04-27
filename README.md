@@ -10,11 +10,10 @@ Module is a standalone phone book that contains persons and associated phone num
         git clone https://github.com/Nakard/phonebook.git
 
 2. Install module dependencies using Composer. If you don't have it, here's the link where you can fetch it
-https://getcomposer.org/download/. To install dependencies run
+https://getcomposer.org/download/. To install dependencies run in the phonebook module root.
 
         composer install
 
-in the phonebook module root.
 
 3. Add those two lines to your application/configs/application.ini file
 
