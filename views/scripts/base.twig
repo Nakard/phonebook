@@ -4,11 +4,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
-
-    <title>{{ title }}</title>
+    <meta name="description" content="Phonebook module for Zend Framework 1.12">
+    <meta name="author" content="Arkadiusz Moskwa <a.moskwa@gmail.com>">
+    <title>Phonebook module</title>
 
     <!-- Bootstrap core CSS -->
     <link href="/assets/phonebook/css/bootstrap.min.css" rel="stylesheet">
@@ -57,23 +55,32 @@
 
     <div class="starter-template">
         {% block filter %}
+        {% set showFilterAndExport = numbers is defined and numbers is not empty %}
         <div class="row">
             <div class="col-md-4">
+
                 <input
                         type="text"
                         value="{{ filter }}"
                         id="filter"
-                        class="form-control"
+                        class="form-control{% if not showFilterAndExport %} hidden{% endif %}"
                         placeholder="Type name or number to filter numbers"
                         />
+
             </div>
             <div class="col-md-4"></div>
             <div class="col-md-4">
                 <div class="btn-group">
-                    <a href="/phonebook/csv/export" type="button" class="btn btn-primary btn-sm" id="exportCsv">
+                    {% if showFilterAndExport %}
+                    <a href="/phonebook/csv/export"
+                       type="button"
+                       class="btn btn-primary btn-sm{% if not showFilterAndExport %} hidden{% endif %}"
+                       id="exportCsv"
+                            >
                         <span class="glyphicon glyphicon-floppy-save"></span>
                         Export to CSV
                     </a>
+                    {% endif %}
                     <button id="csvImport" type="button" class="btn btn-success btn-sm">
                         <span class="glyphicon glyphicon-floppy-open"></span>
                         Import from CSV
@@ -85,8 +92,6 @@
         <div class="row">&nbsp;</div>
         <div id="mainContainer">
             {% block mainContent %}
-                <h1>Bootstrap starter template</h1>
-                <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
             {% endblock %}
         </div>
     </div>

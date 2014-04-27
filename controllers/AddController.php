@@ -27,6 +27,8 @@ class Phonebook_AddController extends Zend_Controller_Action
          */
         $personRepository = $this->entityManager->getRepository('Phonebook\Entity\Person');
         $persons = $personRepository->findAllForSelect();
+        if(empty($persons))
+            $this->redirect('/phonebook/add/new');
         $form = new \Phonebook\Form\Phonebook_Form_ExistingPhonenumber($persons);
 
         $formErrors = array();

@@ -29,10 +29,6 @@ class Phonebook_Form_FileUpload extends Phonebook_Form_Abstract{
             'label' => 'Upload',
             'required' => false,
             'filters' => array(),
-            'validators' => array(
-                array('Count', false, 1),
-                array('Extension', false, 'csv' ),
-            ),
         ));
         $this->addElement(new Submit('Upload'));
         $this->addElement(new Hash());

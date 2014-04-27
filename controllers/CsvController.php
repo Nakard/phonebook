@@ -55,17 +55,17 @@ class Phonebook_CsvController extends Zend_Controller_Action{
     public function importAction()
     {
         $form = new \Phonebook\Form\Phonebook_Form_FileUpload();
-
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $formErrors = array();
-        /**
-         * @var \Phonebook\Repository\PersonRepository $personRepository
-         */
-        $personRepository = $this->entityManager->getRepository('\\Phonebook\\Entity\\Person');
         $title = 'Import phone numbers';
+        $status = '200';
+        $iterator = 0;
         if($adapter->receive())
         {
-
+            /**
+             * @var \Phonebook\Repository\PersonRepository $personRepository
+             */
+            $personRepository = $this->entityManager->getRepository('\\Phonebook\\Entity\\Person');
             try
             {
                 $filename = $adapter->getFileName();
@@ -80,15 +80,16 @@ class Phonebook_CsvController extends Zend_Controller_Action{
             {
                 $formErrors[] = $e->getMessage();
                 $message = 'Some errors occurred while importing data';
+                $status = '400';
             }
-
             $this->_helper->json(array(
                 'title'         =>  $title,
                 'message'       =>  $message,
-                'formErrors'    =>  $formErrors
+                'formErrors'    =>  $formErrors,
+                'status'        =>  $status,
+                'count'         =>  $iterator,
             ));
         }
-
 
         $this->view->modalData = array(
             'title' =>  $title,

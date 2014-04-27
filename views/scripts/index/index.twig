@@ -18,7 +18,7 @@
             });
             filterHandler.startListening({{ page }});
             $("#csvImport").click(function(){
-                phonebookAjaxer.getImportForm();
+                phonebookAjaxer.getImportForm({{ page }});
             });
             $("#mainContainer").click(function(e){
                 if(e.target.dataset.remove)

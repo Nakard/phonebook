@@ -48,7 +48,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
 
         $countNames = count($randNames);
         $countSurnames = count($randSurnames);
-        for($i = 1; $i <= 500; $i++)
+        for($i = 1; $i <= 10; $i++)
         {
             $firstName = $randNames[mt_rand(0,$countNames-1)];
             $lastName = $randSurnames[mt_rand(0,$countSurnames-1)];
@@ -65,7 +65,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
         $personRepo = $this->entityManager->getRepository('\Phonebook\Entity\Person');
         $persons = $personRepo->findAllIds();
         $personsCount = count($persons);
-        for($i = 1; $i <= 10000; $i++)
+        for($i = 1; $i <= 50; $i++)
         {
             $randIndex = mt_rand(0,$personsCount-1);
             $randPersonId = (int)$persons[$randIndex]['id'];

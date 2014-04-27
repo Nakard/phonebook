@@ -7,27 +7,60 @@
  * @author Arkadiusz Moskwa <a.moskwa@gmail.com>
  */
 
+/**
+ * Singleton handling actions associated with the name and phone filter
+ */
 var filterHandler = new function () {
 
+    /**
+     * jQuery object to which the handler listen
+     * @type {jQuery}
+     */
     var filter = $("#filter");
 
+    /**
+     * The string that's passed to the pagination mechanism
+     * @type {string|null}
+     */
     var filterValue = null;
 
-    var timeout = null;
+    /**
+     * Actually running timeout
+     * @type {number}
+     */
+    var timeout = setTimeout();
 
-    var delay = 1000;
+    /**
+     * Delay between last keyup and actual filter
+     * @type {number}
+     */
+    var delay = 500;
 
+    /**
+     * The page that was set when the handler was set to listen
+     * @type {number}
+     */
     var actualPage = null;
 
+    /**
+     * Clears running timeout
+     */
     var clear = function() {
         clearTimeout(timeout);
     };
 
+    /**
+     * Activates the listener on index open, passes the actual page for reference
+     * @param {number} page
+     */
     this.startListening = function (page) {
         $(filter).keyup(listen);
         actualPage = page;
     };
 
+    /**
+     * Main listening method, send appropriate request after timeout runs out
+     */
     var listen = function() {
         if(timeout)
             clear();
@@ -39,6 +72,10 @@ var filterHandler = new function () {
         },delay);
     };
 
+    /**
+     * Gets the filter value
+     * @returns {string|null}
+     */
     this.getFilterValue = function () {
         return filterValue;
     };
