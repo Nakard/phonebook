@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e4ce9765b4193d85785da18033d3acea",
+    "hash": "4e2ed755959648ae7d308b6f067b8388",
     "packages": [
         {
             "name": "alb/zwig",
@@ -574,6 +574,16 @@
                 "orm"
             ],
             "time": "2014-02-08 16:28:24"
+        },
+        {
+            "name": "johnculviner/jquery.fileDownload",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/johnculviner/jquery.fileDownload",
+                "reference": "c67fec04613ef584350749b4d85c15f00e5b1e89"
+            },
+            "type": "library"
         },
         {
             "name": "symfony/console",
