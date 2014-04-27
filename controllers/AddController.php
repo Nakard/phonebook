@@ -42,7 +42,11 @@ class Phonebook_AddController extends Zend_Controller_Action
         if(empty($persons))
             $this->redirect('/phonebook/add/new');
         $form = new \Phonebook\Form\Phonebook_Form_ExistingPhonenumber($persons);
-
+        if($request->isPost())
+        {
+            $form->getElement('phoneNumber')->setValue($request->getPost('phoneNumber'));
+            $form->getElement('person')->setValue($request->getPost('person'));
+        }
         $formErrors = array();
 
         if($request->isPost())
@@ -78,7 +82,6 @@ class Phonebook_AddController extends Zend_Controller_Action
             else
             {
                 $formErrors = array_merge($formErrors, $form->getMessages());
-                $form = new \Phonebook\Form\Phonebook_Form_ExistingPhonenumber($persons);
             }
         }
         $this->view->formErrors = $formErrors;
@@ -98,6 +101,12 @@ class Phonebook_AddController extends Zend_Controller_Action
         $session = new Zend_Session_Namespace('Phonebook');
 
         $form = new \Phonebook\Form\Phonebook_Form_NewPhonenumber();
+        if($request->isPost())
+        {
+            $form->getElement('phoneNumber')->setValue($request->getPost('phoneNumber'));
+            $form->getElement('firstName')->setValue($request->getPost('firstName'));
+            $form->getElement('lastName')->setValue($request->getPost('lastName'));
+        }
         $formErrors = array();
         if($request->isPost())
         {
@@ -128,7 +137,6 @@ class Phonebook_AddController extends Zend_Controller_Action
             else
             {
                 $formErrors = array_merge($formErrors, $form->getMessages());
-                $form = new \Phonebook\Form\Phonebook_Form_NewPhonenumber();
             }
         }
         $this->view->formErrors = $formErrors;
