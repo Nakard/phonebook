@@ -28,10 +28,12 @@ class PhoneNumberRepository extends EntityRepository{
      *
      * @param   int     $page
      * @param   int     $limit
+     * @param   string  $filter
      * @return  array
      */
-    public function getNumbersHydrated()
+    public function getNumbersHydrated($filter)
     {
+
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb
             ->select('p.id as pid, p.firstName, p.lastName, n.id as nid, n.phoneNumber')
@@ -39,6 +41,16 @@ class PhoneNumberRepository extends EntityRepository{
             ->join('Phonebook\Entity\Person','p','WITH','n.person = p.id')
             ->groupBy('n.id')
             ->orderBy('p.lastName');
+
+        if(!is_null($filter))
+        {
+            $lowerFilter = strtolower($filter);
+            $qb
+                ->where('n.phoneNumber LIKE :filter')
+                //->where('LOWER(p.firstName) LIKE :filter')
+                //->andWhere('LOWER(p.lastName) LIKE :filter')
+                ->setParameter('filter',$lowerFilter);
+        }
 
         $query = $qb->getQuery();
 

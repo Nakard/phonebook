@@ -44,13 +44,14 @@ class Phonebook_IndexController extends Zend_Controller_Action
          * @var Zend_Controller_Request_Http $request
          */
         $request = $this->getRequest();
+        $filter = $request->getPost('filter') ? $request->getPost('filter') : null;
         $page = $this->_getParam('page');
         Zend_Paginator::setDefaultScrollingStyle('Sliding');
         /**
          * @var PhoneNumberRepository $phoneNumberRepository
          */
         $phoneNumberRepository = $this->entityManager->getRepository('\Phonebook\Entity\PhoneNumber');
-        $numbers = $phoneNumberRepository->getNumbersHydrated();
+        $numbers = $phoneNumberRepository->getNumbersHydrated($filter);
 
         $paginator = Zend_Paginator::factory($numbers);
         $paginator->setItemCountPerPage(10);

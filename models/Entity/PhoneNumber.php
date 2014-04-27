@@ -38,7 +38,7 @@ class PhoneNumber {
 
     /**
      * @var int $phoneNumber
-     * @Column(type="integer")
+     * @Column(type="string", columnDefinition="CHAR(9) NOT NULL")
      */
     protected $phoneNumber;
 
