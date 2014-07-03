@@ -1,6 +1,5 @@
 <?php
 
-use Phonebook\Exceptions\UniquePersonException;
 use Phonebook\Exceptions\UniquePersonPhoneNumberException;
 
 /**
@@ -10,9 +9,7 @@ use Phonebook\Exceptions\UniquePersonPhoneNumberException;
  */
 class Phonebook_AddController extends Zend_Controller_Action
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
+    /** @var \Doctrine\ORM\EntityManager */
     protected $entityManager;
 
     /**
@@ -29,13 +26,9 @@ class Phonebook_AddController extends Zend_Controller_Action
      */
     public function existingAction()
     {
-        /**
-         * @var Zend_Controller_Request_Http $request
-         */
+        /** @var Zend_Controller_Request_Http $request */
         $request = $this->getRequest();
-        /**
-         * @var Phonebook\Repository\PersonRepository $personRepository
-         */
+        /** @var Phonebook\Repository\PersonRepository $personRepository */
         $session = new Zend_Session_Namespace('Phonebook');
         $personRepository = $this->entityManager->getRepository('Phonebook\Entity\Person');
         $persons = $personRepository->findAllForSelect();
@@ -60,13 +53,9 @@ class Phonebook_AddController extends Zend_Controller_Action
                     $number = $values['phoneNumber'];
                     $phoneNumber = new \Phonebook\Entity\PhoneNumber();
                     $phoneNumber->setPhoneNumber($number);
-                    /**
-                     * @var \Phonebook\Repository\PersonRepository $personRepository
-                     */
+                    /** @var \Phonebook\Repository\PersonRepository $personRepository */
                     $personRepository = $this->entityManager->getRepository('Phonebook\Entity\Person');
-                    /**
-                     * @var \Phonebook\Entity\Person $person
-                     */
+                    /** @var \Phonebook\Entity\Person $person */
                     $person = $personRepository->find($personId);
                     $firstName = $person->getFirstName();
                     $lastName = $person->getLastName();
@@ -94,9 +83,7 @@ class Phonebook_AddController extends Zend_Controller_Action
      */
     public function newAction()
     {
-        /**
-         * @var Zend_Controller_Request_Http $request
-         */
+        /** @var Zend_Controller_Request_Http $request */
         $request = $this->getRequest();
         $session = new Zend_Session_Namespace('Phonebook');
 
@@ -112,9 +99,7 @@ class Phonebook_AddController extends Zend_Controller_Action
         {
             if($form->isValid($request->getPost()))
             {
-                /**
-                 * @var Phonebook\Repository\PersonRepository $personRepository
-                 */
+                /** @var Phonebook\Repository\PersonRepository $personRepository */
                 $personRepository = $this->entityManager->getRepository('Phonebook\Entity\Person');
                 try
                 {

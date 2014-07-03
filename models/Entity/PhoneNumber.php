@@ -11,6 +11,12 @@
 namespace Phonebook\Entity;
 
 use Phonebook\Exceptions\UniquePersonPhoneNumberException;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
  * Class PhoneNumber

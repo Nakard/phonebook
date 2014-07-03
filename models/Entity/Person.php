@@ -11,6 +11,11 @@
 namespace Phonebook\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Phonebook\Exceptions\UniquePersonPhoneNumberException;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\OneToMany;
 
 
 /**

@@ -10,12 +10,10 @@
 
 namespace Phonebook\Form;
 
-use Phonebook\Exceptions\UniquePersonPhoneNumberException;
 use Phonebook\Form\Elements\Hash;
 use Phonebook\Form\Elements\PersonSelect;
 use Phonebook\Form\Elements\PhoneNumberText;
 use Phonebook\Form\Elements\Submit;
-use Phonebook\Repository\PhoneNumberRepository;
 
 /**
  * Class Phonebook_Form_ExistingPhonenumber

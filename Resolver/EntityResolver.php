@@ -10,7 +10,6 @@
 
 namespace Phonebook\Resolver;
 
-use Doctrine\ORM\Tools\Export\ExportException;
 use \Phonebook\Entity\PhoneNumber;
 use \Phonebook\Entity\Person;
 /**
@@ -47,7 +46,8 @@ class EntityResolver {
     /**
      * Transforms edit route parameter to match class name
      *
-     * @param string $type
+     * @param   string $type
+     * @return  string
      */
     public function typeTranslate(&$type)
     {
@@ -63,6 +63,7 @@ class EntityResolver {
      * @param Person|Phonenumber    $entity
      * @param array                 $values
      * @param callable              $validate
+     * @return Person|Phonenumber
      */
     public function callEntitySetMethods(&$entity, array &$values, callable $validate = null)
     {

@@ -10,7 +10,6 @@
 
 namespace Phonebook\Form;
 
-use Doctrine\ORM\EntityManager;
 use Phonebook\Exceptions\UniquePersonException;
 use Phonebook\Form\Elements\Hash;
 use Phonebook\Form\Elements\PersonNameText;

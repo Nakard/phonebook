@@ -10,9 +10,7 @@
 
 namespace Phonebook\Repository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query\Parameter;
 use Doctrine\ORM\Query;
 use Phonebook\Entity\Person;
 use Phonebook\Entity\PhoneNumber;

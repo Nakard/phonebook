@@ -2,6 +2,8 @@
 
 use Phonebook\Repository\PhoneNumberRepository;
 use Phonebook\Form\Phonebook_Form_Abstract;
+use Phonebook\Entity\Person;
+use Phonebook\Entity\PhoneNumber;
 
 /**
  * Main display and edit controller
@@ -10,9 +12,7 @@ use Phonebook\Form\Phonebook_Form_Abstract;
  */
 class Phonebook_IndexController extends Zend_Controller_Action
 {
-    /**
-     * @var \Doctrine\ORM\EntityManager
-     */
+    /** @var \Doctrine\ORM\EntityManager */
     protected $entityManager;
 
     /**
@@ -22,9 +22,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
     {
         $registry = Zend_Registry::getInstance();
         $this->entityManager = $registry->entityManager;
-        /**
-         * @var Zend_Controller_Action_Helper_ContextSwitch $contextSwitch
-         */
+        /** @var Zend_Controller_Action_Helper_ContextSwitch $contextSwitch */
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
         $contextSwitch
             ->clearActionContexts('generate')
@@ -34,9 +32,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
             ->setActionContext('editPerson','json')
             ->setActionContext('editNumber','json')
             ->initContext();
-        /**
-         * @var Zend_Controller_Action_Helper_AjaxContext $ajaxContext
-         */
+        /** @var Zend_Controller_Action_Helper_AjaxContext $ajaxContext */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext
             ->clearActionContexts('remove')
@@ -69,10 +65,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
         }
         $this->entityManager->flush();
 
-
-        /**
-         * @var \Phonebook\Repository\PersonRepository $personRepo
-         */
+        /** @var \Phonebook\Repository\PersonRepository $personRepo */
         $personRepo = $this->entityManager->getRepository('\Phonebook\Entity\Person');
         $persons = $personRepo->findAllIds();
         $personsCount = count($persons);
@@ -80,9 +73,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
         {
             $randIndex = mt_rand(0,$personsCount-1);
             $randPersonId = (int)$persons[$randIndex]['id'];
-            /**
-             * @var \Phonebook\Entity\Person $person
-             */
+            /** @var \Phonebook\Entity\Person $person */
             $person = $personRepo->find($randPersonId);
             $randPhonenumber = mt_rand(100000000,999999999);
             $phoneNumber = new \Phonebook\Entity\PhoneNumber();
@@ -99,6 +90,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
      */
     public function indexAction()
     {
+        /** @var Zend_Controller_Request_Http $request */
         $request = $this->getRequest();
         $filter = $this->getFilter($request);
         $page = $this->_getParam('page');
@@ -109,9 +101,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
             $this->view->sessionMessage = $message;
             unset($session->message);
         }
-        /**
-         * @var PhoneNumberRepository $phoneNumberRepository
-         */
+        /** @var PhoneNumberRepository $phoneNumberRepository */
         $phoneNumberRepository = $this->entityManager->getRepository('\Phonebook\Entity\PhoneNumber');
         $numbers = $phoneNumberRepository->getNumbersHydrated($filter);
 
@@ -134,7 +124,8 @@ class Phonebook_IndexController extends Zend_Controller_Action
     /**
      * Gets filter value from session or POST, depending what's available
      *
-     * @param Zend_Controller_Request_Http $request
+     * @param   Zend_Controller_Request_Http $request
+     * @return  string
      */
     protected function getFilter(Zend_Controller_Request_Http &$request)
     {
@@ -154,9 +145,7 @@ class Phonebook_IndexController extends Zend_Controller_Action
     public function removeAction()
     {
         $phoneNumberId = $this->_getParam('id');
-        /**
-         * @var PhoneNumberRepository $phoneNumberRepository
-         */
+        /** @var PhoneNumberRepository $phoneNumberRepository */
         $phoneNumberRepository = $this->entityManager->getRepository('\Phonebook\Entity\PhoneNumber');
         $phoneNumber = $phoneNumberRepository->find($phoneNumberId);
         $title = 'Phone number remove';
@@ -192,16 +181,13 @@ class Phonebook_IndexController extends Zend_Controller_Action
         $entityResolver = new \Phonebook\Resolver\EntityResolver();
         $entityClass = ucfirst($entityResolver->typeTranslate($this->_getParam('type')));
 
-        /**
-         * @var Zend_Controller_Request_Http $request
-         */
+        /** @var Zend_Controller_Request_Http $request */
         $request = $this->getRequest();
         $entityRepository = $this->entityManager->getRepository('\\Phonebook\\Entity\\'.$entityClass);
+        /** @var Person|Phonenumber $entity */
         $entity = $entityRepository->find($entityId);
         $entityFormClass = "\\Phonebook\\Form\\Phonebook_Form_Edit".$entityClass;
-        /**
-         * @var Phonebook_Form_Abstract $entityForm
-         */
+        /** @var Phonebook_Form_Abstract $entityForm */
         $entityForm = new $entityFormClass();
         $entityFormSetMethod = 'set'.$entityClass;
         $entityForm->$entityFormSetMethod($entity);
@@ -253,9 +239,10 @@ class Phonebook_IndexController extends Zend_Controller_Action
     /**
      * Sets data for form error json output
      *
-     * @param array     $formErrors
-     * @param string    $status
-     * @param string    $message
+     * @param array                     $formErrors
+     * @param string                    $status
+     * @param string                    $message
+     * @param Phonebook_Form_Abstract   $form
      */
     protected function setFormErrorResponse(array &$formErrors, &$status, &$message, Phonebook_Form_Abstract &$form)
     {
@@ -270,11 +257,11 @@ class Phonebook_IndexController extends Zend_Controller_Action
      * @param array     $formErrors
      * @param string    $status
      * @param string    $message
-     * @param Exception $e
+     * @param Exception $exception
      */
-    protected function setExceptionErrorResponse(array &$formErrors, &$status, &$message, \Exception $e)
+    protected function setExceptionErrorResponse(array &$formErrors, &$status, &$message, \Exception $exception)
     {
-        $formErrors[] = $e->getMessage();
+        $formErrors[] = $exception->getMessage();
         $status = '400';
         $message = 'Database error occurred';
     }

@@ -27,17 +27,13 @@ class Phonebook_CsvController extends Zend_Controller_Action{
     {
         $registry = Zend_Registry::getInstance();
         $this->entityManager = $registry->entityManager;
-        /**
-         * @var Zend_Controller_Action_Helper_ContextSwitch $contextSwitch
-         */
+        /** @var Zend_Controller_Action_Helper_ContextSwitch $contextSwitch */
         $contextSwitch = $this->_helper->getHelper('contextSwitch');
         $contextSwitch
             ->setActionContext('import','json')
             ->clearActionContexts('export')
             ->initContext();
-        /**
-         * @var Zend_Controller_Action_Helper_AjaxContext $ajaxContext
-         */
+        /** @var Zend_Controller_Action_Helper_AjaxContext $ajaxContext */
         $ajaxContext = $this->_helper->getHelper('AjaxContext');
         $ajaxContext
             ->clearActionContexts('export')
@@ -49,9 +45,7 @@ class Phonebook_CsvController extends Zend_Controller_Action{
      */
     public function exportAction()
     {
-        /**
-         * @var \Phonebook\Repository\PhoneNumberRepository $phoneNumberRepository
-         */
+        /** @var \Phonebook\Repository\PhoneNumberRepository $phoneNumberRepository */
         $phoneNumberRepository = $this->entityManager->getRepository('\Phonebook\Entity\PhoneNumber');
         $phoneNumbers = $phoneNumberRepository->getExport();
         $filename = 'Phone_Book_export.csv';
@@ -77,9 +71,7 @@ class Phonebook_CsvController extends Zend_Controller_Action{
         $iterator = 0;
         if($adapter->receive())
         {
-            /**
-             * @var \Phonebook\Repository\PersonRepository $personRepository
-             */
+            /** @var \Phonebook\Repository\PersonRepository $personRepository */
             $personRepository = $this->entityManager->getRepository('\\Phonebook\\Entity\\Person');
             try
             {
